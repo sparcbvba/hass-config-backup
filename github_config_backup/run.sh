@@ -39,20 +39,22 @@ echo "[Info] Automatische loop gestart. Controleert elke ${INTERVAL} seconden."
 
 # Start de eindeloze loop
 while true; do
-    # 1. Haal EERST eventuele wijzigingen van GitHub binnen
     echo "[Info] Controleren op wijzigingen vanuit GitHub..."
     git pull origin main || echo "[Waarschuwing] Kon niet pullen, mogelijk een conflict of netwerkfout."
 
-    # 2. Stage ALLEEN configuration.yaml en de template folder
-    if [ -f "configuration.yaml" ]; then
-        git add configuration.yaml
-    fi
+    echo "[Info] Geselecteerde bestanden/mappen voorbereiden (stagen)..."
     
-    if [ -d "integrations" ]; then
-        git add integrations/
-    fi
+    # Lees de lijst met mappen/bestanden en loop er één voor één doorheen
+    jq -r '.target_paths[]' $CONFIG_PATH | while read target; do
+        # Controleer of het bestand of de map daadwerkelijk bestaat (-e)
+        if [ -e "$target" ]; then
+            git add "$target"
+        else
+            echo "[Waarschuwing] '$target' bestaat niet in /config en is overgeslagen."
+        fi
+    done
 
-    # Check of de bestanden zijn gewijzigd
+    # Check of er daadwerkelijk iets is toegevoegd aan Git (gewijzigd)
     if ! git diff --cached --quiet; then
         echo "[Info] Wijziging(en) gedetecteerd! Bezig met pushen naar GitHub..."
         git commit -m "Automatische backup: $(date +"%Y-%m-%d %H:%M:%S")"
