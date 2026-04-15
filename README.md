@@ -60,3 +60,23 @@ Add the following lines to your `configuration.yaml` file to allow Home Assistan
 ```yaml
 shell_command:
   trigger_github_backup: "touch /config/.sync_now"
+```
+
+(Make sure to restart Home Assistant or reload your YAML configuration after adding this).
+
+***Step 2: Add a Dashboard Button***
+Add a new Button card to your Home Assistant dashboard with the following YAML code:
+
+```yaml
+type: button
+name: Backup Now
+icon: mdi:github
+tap_action:
+  action: call-service
+  service: shell_command.trigger_github_backup
+```
+**How it works:** When you click the button, Home Assistant creates a file named `.sync_now`. The add-on detects this file within a second, removes it, and instantly starts pushing your changes to GitHub!
+
+
+## Troubleshooting
+Check the Log tab in the add-on for details about the process. Here you can see if the connection to GitHub is successful and if any changes were detected. Note: If you edit the same file simultaneously on GitHub and locally without syncing first, you might encounter a Merge Conflict. In that case, you will need to resolve it manually via the terminal or a code editor.
