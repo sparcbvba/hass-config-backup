@@ -1,41 +1,56 @@
 # GitHub Config Backup for Home Assistant
 
-This Home Assistant add-on provides a simple and secure way to apply version control to your most important configuration files using GitHub. 
+This Home Assistant add-on provides a simple and secure way to apply version control to your configuration files using GitHub. 
 
-Instead of creating a full system backup, this add-on focuses specifically on the files you frequently edit manually. This GitOps approach gives you a clean and organized commit history of your changes and allows you to sync your configuration across different setups.
+Instead of creating a full system backup, this add-on focuses specifically on the files you manage yourself. Using a GitOps approach, you keep a clean history of your changes and can easily synchronize configurations across different systems.
 
 ## How it works
 
-When you start the add-on, it performs the following steps:
-1. **Initialization:** The add-on checks if the Home Assistant `/config` directory is already linked to a Git repository. If not, it initializes one.
-2. **Authentication:** It securely connects to GitHub using your provided Personal Access Token (PAT).
-3. **Syncing (The Loop):** The add-on runs continuously in the background. On a set interval (e.g., every 3600 seconds), it performs a two-way sync:
-   - **Pull:** It first checks GitHub for any new changes and pulls them into your local setup. *(Note: You may need to reload your YAML in Home Assistant for these changes to take effect).*
-   - **Check:** It then checks your local `configuration.yaml` and the `template/` directory for any modifications.
-4. **Commit:** If a local change is detected in any of these targets, the add-on automatically creates a commit with the message: `Automatische backup: [Date and Time]`.
-5. **Push:** The changes are instantly pushed to the `main` branch of your configured GitHub repository.
+When the add-on is running, it performs the following steps:
+1. **Initialization:** The add-on checks if the `/config` directory is already a Git repository. If not, it initializes one.
+2. **Authentication:** It securely connects to GitHub using your Personal Access Token (PAT).
+3. **Syncing (The Loop):** The add-on runs continuously in the background and performs a two-way sync on a set interval (e.g., every hour):
+   - **Pull:** It first fetches new changes from GitHub and applies them to your local Home Assistant files.
+   - **Check:** It then checks if there are any local modifications in your specified target files or directories.
+4. **Commit & Push:** If local changes are detected, they are automatically committed with a timestamp and pushed to GitHub.
 
-*Note: If no changes are detected, the add-on simply waits until the next scheduled check.*
+## Installation
 
-## Safety (Why no secrets.yaml?)
+Follow these steps to install and configure the add-on:
 
-This add-on is explicitly designed **not** to use commands like `git add .` (which stages all files). By specifically targeting `git add configuration.yaml` and `git add template/`, it eliminates the risk of accidentally pushing your `secrets.yaml` (which contains your passwords, API keys, and tokens) or large database files to a public or remote GitHub repository.
+### 1. Preparation on GitHub
+* **Create a Backup Repository:** Create a new repository on GitHub. **Ensure it is set to 'Private'** to protect your configuration data.
+* **Generate a Token:** Go to *Settings > Developer Settings > Personal access tokens (Tokens (classic))* on GitHub. Create a token with the `repo` scope/permissions and save it securely.
+
+### 2. Adding the Add-on to Home Assistant
+* In Home Assistant, go to **Settings** > **Add-ons** > **Add-on Store**.
+* Click the three dots in the top right corner and select **Repositories**.
+* Add the URL of *this* add-on's public GitHub repository.
+* Search the store for "GitHub Config Backup" and click **Install**.
+
+### 3. Configuration
+Go to the **Configuration** tab of the add-on and fill in the following fields:
+* `github_repo`: The full HTTPS URL of your private backup repository.
+* `github_token`: Your newly created Personal Access Token.
+* `target_paths`: A list of files or directories you want to back up (e.g., `configuration.yaml`, `automations.yaml`, `integrations/`).
+
+Click **Save** and then click **Start** on the Information tab.
+
+## Safety (secrets.yaml)
+
+This add-on is explicitly designed to only stage and push the exact files and directories you specify in `target_paths`. This prevents sensitive files like `secrets.yaml` (which contains your passwords) or large database files from accidentally ending up on GitHub.
 
 ## Configuration Options
 
-In the "Configuration" tab of the add-on, the user must provide the following parameters:
+| Option | Description |
+| :--- | :--- |
+| `github_repo` | The full HTTPS URL of your private repository. |
+| `github_token` | Your GitHub Personal Access Token (PAT). |
+| `git_name` | The author name displayed on the commits. |
+| `git_email` | The email address associated with the commits. |
+| `commit_interval` | The time in seconds between each sync cycle (default is 3600). |
+| `target_paths` | A list of files and directories to synchronize. |
 
-| Option | Description | Example |
-| :--- | :--- | :--- |
-| `github_repo` | The full HTTPS URL of your repository. | `https://github.com/YOUR_NAME/HA-Config.git` |
-| `github_token` | Your GitHub Personal Access Token (PAT). Ensure this token has the `repo` scope permissions. | `ghp_abCDefGHIjkLMNopQRS...` |
-| `git_name` | The author name displayed on your commits. | `Home Assistant` |
-| `git_email` | The email address associated with your GitHub commits. | `your@email.com` |
-| `commit_interval` | The time in seconds between each sync cycle. | `3600` (1 hour) or `86400` (24 hours) |
+## Troubleshooting
 
-## Troubleshooting (Logs)
-
-If you don't see changes appearing on GitHub, or if files aren't downloading to Home Assistant, check the **Log** tab in the add-on. 
-- You will see messages like `[Info] Wijziging(en) gedetecteerd! Bezig met pushen naar GitHub...` when a push is successful.
-- If the Personal Access Token is expired or incorrect, the Git output in this log will display the error (e.g., *Authentication failed*).
-- If you edit the same file locally and on GitHub simultaneously, you might encounter a *Merge Conflict*. The logs will warn you if a `git pull` fails.
+Check the **Log** tab in the add-on for details about the process. Here you can see if the connection to GitHub is successful and if any changes were detected. Note: If you edit the same file simultaneously on GitHub and locally without syncing first, you might encounter a *Merge Conflict*. In that case, you will need to resolve it manually via the terminal or a code editor.
