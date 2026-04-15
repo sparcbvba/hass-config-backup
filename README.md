@@ -62,7 +62,8 @@ shell_command:
   trigger_github_backup: "touch /config/.sync_now"
 ```
 
-(Make sure to restart Home Assistant or reload your YAML configuration after adding this).
+
+> ⚠️ **IMPORTANT**: You MUST perform a full restart of Home Assistant after adding this. A simple "Reload YAML" is not enough when adding a shell_command for the first time!
 
 ***Step 2: Add a Dashboard Button***
 Add a new Button card to your Home Assistant dashboard with the following YAML code:

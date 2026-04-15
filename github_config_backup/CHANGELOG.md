@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.7
+- Clarified the README.md instructions for the manual sync button. Added a strong warning that a full Home Assistant restart is strictly required when adding `shell_command` for the first time.
+
 ## 1.0.6
 - Added manual sync instructions in `readme.md`
 
