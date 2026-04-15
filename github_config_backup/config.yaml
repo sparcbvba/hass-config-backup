@@ -1,0 +1,28 @@
+name: "GitHub Config Backup"
+description: "Pusht configuration.yaml en de template map automatisch naar GitHub"
+version: "1.0.0"
+slug: "github_config_backup"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+startup: application
+boot: auto
+map:
+  - config:rw
+options:
+  # Dit zijn de standaardwaarden die de gebruiker ziet
+  github_repo: ""
+  github_token: ""
+  git_name: "Home Assistant"
+  git_email: ""
+  commit_interval: 3600
+schema:
+  # Dit bepaalt hoe de invoervelden eruit zien in de UI
+  github_repo: str
+  github_token: password  # 'password' zorgt ervoor dat het token verborgen is in de UI
+  git_name: str
+  git_email: str
+  commit_interval: int
