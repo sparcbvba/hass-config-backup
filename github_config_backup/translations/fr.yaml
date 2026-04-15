@@ -1,0 +1,19 @@
+configuration:
+  github_repo:
+    name: "URL du dépôt GitHub"
+    description: "L'URL HTTPS complète de votre dépôt GitHub privé (ex: https://github.com/NOM/HA-Config.git)."
+  github_token:
+    name: "Jeton d'accès personnel"
+    description: "Votre jeton d'accès personnel (PAT) GitHub avec les droits 'repo'. Gardez-le secret."
+  git_name:
+    name: "Nom de l'auteur"
+    description: "Le nom qui sera affiché comme auteur des commits GitHub."
+  git_email:
+    name: "E-mail de l'auteur"
+    description: "L'adresse e-mail associée à vos commits GitHub."
+  commit_interval:
+    name: "Intervalle de synchro (secondes)"
+    description: "Fréquence à laquelle l'extension vérifie les changements (3600 = 1 heure)."
+  target_paths:
+    name: "Chemins à synchroniser"
+    description: "Une liste de fichiers et dossiers dans votre répertoire /config à sauvegarder."

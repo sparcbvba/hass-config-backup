@@ -1,0 +1,19 @@
+configuration:
+  github_repo:
+    name: "GitHub Repository URL"
+    description: "De volledige HTTPS URL van je privé GitHub repository (bijv. https://github.com/GEBRUIKER/HA-Config.git)."
+  github_token:
+    name: "Persoonlijk Toegangstoken"
+    description: "Je GitHub Personal Access Token (PAT) met 'repo' rechten. Houd dit geheim."
+  git_name:
+    name: "Naam Auteur"
+    description: "De naam die wordt weergegeven als de auteur van de GitHub commits."
+  git_email:
+    name: "E-mail Auteur"
+    description: "Het e-mailadres dat gekoppeld is aan je GitHub commits."
+  commit_interval:
+    name: "Synchronisatie-interval (seconden)"
+    description: "Hoe vaak de add-on moet controleren op wijzigingen (3600 = 1 uur)."
+  target_paths:
+    name: "Te synchroniseren paden"
+    description: "Een lijst met bestanden en mappen in je /config map om te back-uppen (bijv. configuration.yaml, integrations/)."

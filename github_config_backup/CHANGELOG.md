@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.4
+- Added English, Dutch, and French titles and detailed descriptions to the configuration UI to help users fill out the options correctly.
+
 ## 1.0.3
 - Add CHANGELOG.md
 

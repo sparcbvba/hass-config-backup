@@ -1,0 +1,19 @@
+configuration:
+  github_repo:
+    name: "GitHub Repository URL"
+    description: "The full HTTPS URL of your private GitHub repository (e.g., https://github.com/YOUR_NAME/HA-Config.git)."
+  github_token:
+    name: "Personal Access Token"
+    description: "Your GitHub Personal Access Token (PAT) with 'repo' scope. Keep this secure."
+  git_name:
+    name: "Author Name"
+    description: "The name that will be displayed as the author of the GitHub commits."
+  git_email:
+    name: "Author Email"
+    description: "The email address associated with your GitHub commits."
+  commit_interval:
+    name: "Sync Interval (seconds)"
+    description: "How often the add-on should check for changes and sync with GitHub. (3600 = 1 hour)."
+  target_paths:
+    name: "Target Paths to Sync"
+    description: "A list of files and folders in your /config directory to backup (e.g., configuration.yaml, integrations/, template/)."
