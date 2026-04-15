@@ -53,7 +53,7 @@ This add-on is explicitly designed to only stage and push the exact files and di
 
 ## Manual Sync Trigger (Dashboard Button)
 
-If you don't want to wait for the automatic sync interval, you can force an instant sync by creating a button on your Home Assistant dashboard.
+If you don't want to wait for the automatic sync interval, you can force an instant sync by creating a button on your Home Assistant dashboard. To ensure you get visual feedback when the backup is triggered, we will use a Home Assistant Script.
 
 **Step 1: Create a Shell Command**
 Add the following lines to your `configuration.yaml` file to allow Home Assistant to create a hidden trigger file:
@@ -62,10 +62,25 @@ shell_command:
   trigger_github_backup: "touch /config/.sync_now"
 ```
 
+> **⚠️ IMPORTANT**: You MUST perform a full restart of Home Assistant after adding this. A simple "Reload YAML" is not enough when adding a shell_command for the first time!
 
-> ⚠️ **IMPORTANT**: You MUST perform a full restart of Home Assistant after adding this. A simple "Reload YAML" is not enough when adding a shell_command for the first time!
+**Step 2: Create a Script for Visual Feedback**
+Add the following code to your `scripts.yaml` file. This script triggers the shell command and then sends a notification to your screen:
 
-***Step 2: Add a Dashboard Button***
+```yaml
+trigger_github_backup:
+  alias: "Trigger GitHub Backup"
+  icon: mdi:github
+  sequence:
+    - action: shell_command.trigger_github_backup
+    - action: persistent_notification.create
+      data:
+        title: "GitHub Backup Started"
+        message: "A manual sync to GitHub has been triggered!"
+```
+(After saving this file, go to Developer Tools > YAML and click Reload Scripts).
+
+**Step 3: Add a Dashboard Button**
 Add a new Button card to your Home Assistant dashboard with the following YAML code:
 
 ```yaml
@@ -74,10 +89,10 @@ name: Backup Now
 icon: mdi:github
 tap_action:
   action: call-service
-  service: shell_command.trigger_github_backup
+  service: script.trigger_github_backup
 ```
-**How it works:** When you click the button, Home Assistant creates a file named `.sync_now`. The add-on detects this file within a second, removes it, and instantly starts pushing your changes to GitHub!
 
+**How it works**: When you click the button, the script calls the shell command and instantly shows a notification in Home Assistant. Meanwhile, the shell_command creates a file named .sync_now. The add-on detects this file within a second, removes it, and instantly starts pushing your changes to GitHub!
 
-## Troubleshooting
+## Troubleshooting ##
 Check the Log tab in the add-on for details about the process. Here you can see if the connection to GitHub is successful and if any changes were detected. Note: If you edit the same file simultaneously on GitHub and locally without syncing first, you might encounter a Merge Conflict. In that case, you will need to resolve it manually via the terminal or a code editor.

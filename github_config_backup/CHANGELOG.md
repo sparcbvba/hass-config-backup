@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.8
+- Updated `README.md` with a better approach for the manual sync button. It now uses a Home Assistant script to provide direct visual feedback (a persistent notification) to the user when a backup is triggered.
+
 ## 1.0.7
 - Clarified the README.md instructions for the manual sync button. Added a strong warning that a full Home Assistant restart is strictly required when adding `shell_command` for the first time.
 
