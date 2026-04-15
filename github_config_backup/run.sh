@@ -62,6 +62,13 @@ while true; do
         echo "[Info] Succesvol gepusht."
     fi
 
-    # Wacht het ingestelde interval (in seconden)
-    sleep "${INTERVAL}"
+    # Wacht het ingestelde interval (in seconden), of tot een handmatige trigger
+    for (( i=0; i<INTERVAL; i++ )); do
+        if [ -f "/config/.sync_now" ]; then
+            echo "[Info] Handmatige sync getriggerd! (.sync_now bestand gevonden en verwijderd)"
+            rm "/config/.sync_now"
+            break
+        fi
+        sleep 1
+    done
 done

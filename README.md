@@ -51,6 +51,12 @@ This add-on is explicitly designed to only stage and push the exact files and di
 | `commit_interval` | The time in seconds between each sync cycle (default is 3600). |
 | `target_paths` | A list of files and directories to synchronize. |
 
-## Troubleshooting
+## Manual Sync Trigger (Dashboard Button)
 
-Check the **Log** tab in the add-on for details about the process. Here you can see if the connection to GitHub is successful and if any changes were detected. Note: If you edit the same file simultaneously on GitHub and locally without syncing first, you might encounter a *Merge Conflict*. In that case, you will need to resolve it manually via the terminal or a code editor.
+If you don't want to wait for the automatic sync interval, you can force an instant sync by creating a button on your Home Assistant dashboard.
+
+**Step 1: Create a Shell Command**
+Add the following lines to your `configuration.yaml` file to allow Home Assistant to create a hidden trigger file:
+```yaml
+shell_command:
+  trigger_github_backup: "touch /config/.sync_now"

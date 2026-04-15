@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.5
+- Added support for manual sync triggers. Users can now force a sync instantly by creating a `/config/.sync_now` file. Ideal for creating a custom dashboard button using `shell_command`.
+
 ## 1.0.4
 - Added English, Dutch, and French titles and detailed descriptions to the configuration UI to help users fill out the options correctly.
 
